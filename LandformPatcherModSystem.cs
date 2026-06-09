@@ -17,6 +17,7 @@ namespace LandformPatcher;
 public class LandformPatcherModSystem : ModSystem
 {
     private Harmony harmony;
+    private static ICoreServerAPI sapi;
 
     public static ILogger Logger;
 
@@ -30,10 +31,21 @@ public class LandformPatcherModSystem : ModSystem
         Logger = Mod.Logger;
         harmony = new Harmony(Mod.Info.ModID);
         harmony.PatchAll();
+
+        if (api.ModLoader.IsModEnabled("watersheds"))
+        {
+            harmony.Patch(AccessTools.Method(AccessTools.TypeByName("Watersheds.WorldGen.Terrain.TerrainGenerationLib"), "CalcOceanDistortion"), transpiler: new(PatchOceanDepthWatersheds));
+        }
+
+        if (api.ModLoader.IsModEnabled("algernonsterrainsampler"))
+        {
+            harmony.Patch(AccessTools.Method(AccessTools.TypeByName("AlgernonsTerrainSampler.Terrain.TerrainGenerationLib"), "CalcOceanDistortion"), transpiler: new(PatchOceanDepthWatersheds));
+        }
     }
 
     public override void StartServerSide(ICoreServerAPI api)
     {
+        sapi = api;
         api.Event.SaveGameLoaded += () =>
         {
             var data = api.WorldManager.SaveGame.GetData(Mod.Info.ModID);
@@ -60,8 +72,8 @@ public class LandformPatcherModSystem : ModSystem
     [HarmonyPatch(typeof(LandformVariant), nameof(LandformVariant.Init))]
     public static bool PatchLandforms(LandformVariant __instance, IWorldManagerAPI api, int index)
     {
-        Logger.Debug($"Patching landform {__instance.Code}");
-        Logger.Debug($"Original TerrainYKeyPositions: [{string.Join(", ", __instance.TerrainYKeyPositions)}]");
+        Logger.VerboseDebug($"Patching landform {__instance.Code}");
+        Logger.VerboseDebug($"Original TerrainYKeyPositions: [{string.Join(", ", __instance.TerrainYKeyPositions)}]");
 
         // Prevent mutations without predefined TerrainYKeyPositions from being double-patched
         foreach (var mutation in __instance.Mutations)
@@ -130,24 +142,32 @@ public class LandformPatcherModSystem : ModSystem
             }
         }
 
-        Logger.Debug(message: $"Patched TerrainYKeyPositions: [{string.Join(", ", __instance.TerrainYKeyPositions)}]");
+        Logger.VerboseDebug(message: $"Patched TerrainYKeyPositions: [{string.Join(", ", __instance.TerrainYKeyPositions)}]");
         return true;
     }
 
     [HarmonyTranspiler]
     [HarmonyPatch(typeof(GenTerra), "generate")]
-    public static IEnumerable<CodeInstruction> PatchOceanDepth(IEnumerable<CodeInstruction> instructions)
+    public static IEnumerable<CodeInstruction> PatchOceanDepthVanilla(IEnumerable<CodeInstruction> instructions)
+    {
+        return PatchOceanDepth(instructions, instr => instr.opcode == OpCodes.Stfld && ((FieldInfo)instr.operand).Name == "oceanicityFac");
+    }
+
+    public static IEnumerable<CodeInstruction> PatchOceanDepthWatersheds(IEnumerable<CodeInstruction> instructions)
+    {
+        return PatchOceanDepth(instructions, instr => instr.opcode == OpCodes.Stloc_0);
+    }
+
+    public static IEnumerable<CodeInstruction> PatchOceanDepth(IEnumerable<CodeInstruction> instructions, Predicate<CodeInstruction> target)
     {
         var patched = false;
 
         foreach (var instr in instructions)
         {
-            if (instr.opcode == OpCodes.Stfld && ((FieldInfo)instr.operand).Name == "oceanicityFac")
+            if (target(instr))
             {
                 patched = true;
-                yield return new(OpCodes.Ldarg_0);
-                yield return new(OpCodes.Ldfld, AccessTools.Field(typeof(GenTerra), "api"));
-                yield return new(OpCodes.Call, AccessTools.Method(typeof(LandformPatcherModSystem), nameof(ModifyOceanityFac)));
+                yield return new(OpCodes.Call, AccessTools.Method(typeof(LandformPatcherModSystem), nameof(ModifyOceanicityFactor)));
             }
 
             yield return instr;
@@ -159,10 +179,10 @@ public class LandformPatcherModSystem : ModSystem
         }
     }
 
-    public static float ModifyOceanityFac(float original, ICoreServerAPI api)
+    public static float ModifyOceanicityFactor(float original)
     {
         // The ocean map is from 0-255 and it is scaled by this to get the actual y level change
-        return api.World.Config.GetAsBool("landformpatcherPatchOceanDepth", false) ? api.World.SeaLevel / 110f * 0.33333f : original;
+        return sapi.World.Config.GetAsBool("landformpatcherPatchOceanDepth", false) ? sapi.World.SeaLevel / 110f * 0.33333f : original;
     }
 
     // Included for compatibility with v1.0.0, which didn't use the world config system

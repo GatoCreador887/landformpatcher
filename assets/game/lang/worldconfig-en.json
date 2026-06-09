@@ -1,19 +1,19 @@
 {
     "worldconfig-category-landformpatcher": "Landform patcher",
-    "worldattribute-landformpatcherDefaultSeaLevel": "Default Sea Level",
+    "worldattribute-landformpatcherDefaultSeaLevel": "Default sea level",
     "worldattribute-landformpatcherDefaultSeaLevel-desc": "This is the sea level the patcher will treat as being used by all landforms. Should be left as the default value unless you have a good reason to change it.",
-    "worldattribute-landformpatcherHeightPatchingModeSurface": "Surface Height Patching Mode",
+    "worldattribute-landformpatcherHeightPatchingModeSurface": "Surface height patching mode",
     "worldattribute-landformpatcherHeightPatchingModeSurface-desc": "The strategy used to patch the height of landforms to align them with the world sea level, applied to the portions of landforms above sea level.\n\n<strong>Scale</strong>\nScales landforms around the sea level. If the sea level is lower than the default sea level, surface portions of landforms are scaled up (made steeper). If it is higher, surface portions are scaled down (made flatter). In any case, landforms are anchored at the actual sea level.\n\n<strong>Offset</strong>\nLinearly adjusts landforms by the difference between the actual sea level and the default sea level.\n\n<strong>Stretch</strong>\nStretches the surface portions of landforms down to sea level. The highest point of the landform will remain unchanged. Only works properly with sea levels lower than the default and will produce strange terrain if the sea level is higher than the default.\n\n<strong>None</strong>\nDoes not perform any height patching.",
     "worldconfig-landformpatcherHeightPatchingModeSurface-Scale": "Scale",
     "worldconfig-landformpatcherHeightPatchingModeSurface-Offset": "Offset",
     "worldconfig-landformpatcherHeightPatchingModeSurface-Stretch": "Stretch",
     "worldconfig-landformpatcherHeightPatchingModeSurface-None": "None",
-    "worldattribute-landformpatcherHeightPatchingModeSubmerged": "Submerged Height Patching Mode",
+    "worldattribute-landformpatcherHeightPatchingModeSubmerged": "Submerged height patching mode",
     "worldattribute-landformpatcherHeightPatchingModeSubmerged-desc": "The strategy used to patch the height of landforms to align them with the world sea level, applied to the portions of landforms below sea level.\n\n<strong>Scale</strong>\nScales landforms around the sea level. If the sea level is lower than the default sea level, submerged portions are scaled down (made flatter). If it is higher, submerged portions are scaled up (made steeper). In any case, landforms are anchored at the actual sea level.\n\n<strong>Offset</strong>\nLinearly adjusts landforms by the difference between the actual sea level and the default sea level.\n\n<strong>Stretch</strong>\nStretches the submerged portions of landforms up to sea level. The lowest point of the landform will remain unchanged. Only works properly with sea levels higher than the default and will produce strange terrain if the sea level is lower than the default.\n\n<strong>None</strong>\nDoes not perform any height patching.",
     "worldconfig-landformpatcherHeightPatchingModeSubmerged-Scale": "Scale",
     "worldconfig-landformpatcherHeightPatchingModeSubmerged-Offset": "Offset",
     "worldconfig-landformpatcherHeightPatchingModeSubmerged-Stretch": "Stretch",
     "worldconfig-landformpatcherHeightPatchingModeSubmerged-None": "None",
-    "worldattribute-landformpatcherPatchOceanDepth": "Patch Ocean Depth",
+    "worldattribute-landformpatcherPatchOceanDepth": "Patch ocean depth",
     "worldattribute-landformpatcherPatchOceanDepth-desc": "The base game increases the depth of oceans according to world height. This means that sea levels lower than the default have excessively deep oceans, potentially to the point of hitting the mantle, and that sea levels higher than the default have shallower oceans than necessary. Leave this on unless you have a very good reason to turn it off."
 }
