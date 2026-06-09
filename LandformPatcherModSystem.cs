@@ -47,7 +47,7 @@ public class LandformPatcherModSystem : ModSystem
     {
         api.Event.SaveGameCreated += () =>
         {
-            worldData = new(saveDataVersion, config.DefaultSeaLevel, Enum.TryParse<HeightPatchingMode>(config.HeightPatchMode, true, out var parsedMode) ? parsedMode : HeightPatchingMode.Scale);
+            worldData = new(saveDataVersion, config.DefaultSeaLevel, Enum.TryParse<HeightPatchingMode>(config.HeightPatchMode, true, out var parsedMode) ? parsedMode : HeightPatchingMode.None);
             api.WorldManager.SaveGame.StoreData($"{Mod.Info.ModID}", SerializerUtil.Serialize(worldData));
             api.Logger.Event($"Saved {Mod.Info.ModID} data for new save game");
         };
@@ -78,6 +78,11 @@ public class LandformPatcherModSystem : ModSystem
     [HarmonyPatch(typeof(LandformVariant), nameof(LandformVariant.Init))]
     public static bool PatchLandforms(LandformVariant __instance, IWorldManagerAPI api, int index)
     {
+        if (worldData == null)
+        {
+            return true;
+        }
+
         switch (worldData.heightPatchingMode)
         {
             case HeightPatchingMode.Scale:
