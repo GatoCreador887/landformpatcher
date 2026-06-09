@@ -1,0 +1,60 @@
+{
+    "playstyles": [],
+    "worldConfigAttributes": [
+        {
+            "category": "landformpatcher",
+            "code": "landformpatcherDefaultSeaLevel",
+            "dataType": "doubleinput",
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.05,
+            "default": "0.43137254901960786",
+            "onlyDuringWorldCreate": true
+        },
+        {
+            "category": "landformpatcher",
+            "code": "landformpatcherHeightPatchingModeSurface",
+            "dataType": "dropdown",
+            "values": [
+                "scale",
+                "offset",
+                "stretch",
+                "none"
+            ],
+            "names": [
+                "Scale",
+                "Offset",
+                "Stretch",
+                "None"
+            ],
+            "default": "scale",
+            "onlyDuringWorldCreate": true
+        },
+        {
+            "category": "landformpatcher",
+            "code": "landformpatcherHeightPatchingModeSubmerged",
+            "dataType": "dropdown",
+            "values": [
+                "scale",
+                "offset",
+                "stretch",
+                "none"
+            ],
+            "names": [
+                "Scale",
+                "Offset",
+                "Stretch",
+                "None"
+            ],
+            "default": "scale",
+            "onlyDuringWorldCreate": true
+        },
+        {
+            "category": "landformpatcher",
+            "code": "landformpatcherPatchOceanDepth",
+            "dataType": "bool",
+            "default": "true",
+            "onlyDuringWorldCreate": true
+        }
+    ]
+}
