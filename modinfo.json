@@ -1,0 +1,12 @@
+{
+  "type": "code",
+  "modid": "landformpatcher",
+  "name": "Landform Patcher",
+  "authors": ["vostSive"],
+  "description": "Patches landforms at runtime in a configurable manner to make them work better with certain world configurations.",
+  "version": "1.0.0",
+  "side": "Server",
+  "dependencies": {
+    "game": "*"
+  }
+}

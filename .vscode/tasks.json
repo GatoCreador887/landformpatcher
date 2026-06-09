@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Client",
+            "type": "shell",
+            "command": "dotnet build && \"${env:VINTAGE_STORY}/Vintagestory\" --tracelog --dataPath \"${workspaceFolder}/run\" --addModPath \"${workspaceFolder}/bin/Debug/Mods\"",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run Server",
+            "type": "shell",
+            "command": "dotnet build && \"${env:VINTAGE_STORY}/VintagestoryServer\" --tracelog --dataPath \"${workspaceFolder}/run\" --addModPath \"${workspaceFolder}/bin/Debug/Mods\"",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
