@@ -15,5 +15,5 @@
     "worldconfig-landformpatcherHeightPatchingModeSubmerged-Stretch": "Stretch",
     "worldconfig-landformpatcherHeightPatchingModeSubmerged-None": "None",
     "worldattribute-landformpatcherPatchOceanDepth": "Patch ocean depth",
-    "worldattribute-landformpatcherPatchOceanDepth-desc": "The base game increases the depth of oceans according to world height. This means that sea levels lower than the default have excessively deep oceans, potentially to the point of hitting the mantle, and that sea levels higher than the default have shallower oceans than necessary. Leave this on unless you have a very good reason to turn it off."
+    "worldattribute-landformpatcherPatchOceanDepth-desc": "The base game increases the depth of oceans according to world height. This means that sea levels lower than the default have excessively deep oceans, potentially to the point of hitting the mantle, and that sea levels higher than the default have shallower oceans than necessary. This setting makes ocean depth scale according to sea level instead of world height. Leave this on unless you have a very good reason to turn it off."
 }

@@ -19,7 +19,7 @@ public class LandformPatcherModSystem : ModSystem
     private Harmony harmony;
     private static ICoreServerAPI sapi;
 
-    public static ILogger Logger;
+    public static ILogger Logger { get; private set; }
 
     public override bool ShouldLoad(EnumAppSide forSide)
     {
@@ -70,8 +70,14 @@ public class LandformPatcherModSystem : ModSystem
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(LandformVariant), nameof(LandformVariant.Init))]
-    public static bool PatchLandforms(LandformVariant __instance, IWorldManagerAPI api, int index)
+    public static void PatchLandforms(LandformVariant __instance, IWorldManagerAPI api, int index)
     {
+        // Avoid patching Rivers landforms, since Custom Sea Level already does that
+        if (__instance.Code == "game:riverlandform")
+        {
+            return;
+        }
+
         Logger.VerboseDebug($"Patching landform {__instance.Code}");
         Logger.VerboseDebug($"Original TerrainYKeyPositions: [{string.Join(", ", __instance.TerrainYKeyPositions)}]");
 
@@ -142,8 +148,7 @@ public class LandformPatcherModSystem : ModSystem
             }
         }
 
-        Logger.VerboseDebug(message: $"Patched TerrainYKeyPositions: [{string.Join(", ", __instance.TerrainYKeyPositions)}]");
-        return true;
+        Logger.VerboseDebug($"Patched TerrainYKeyPositions: [{string.Join(", ", __instance.TerrainYKeyPositions)}]");
     }
 
     [HarmonyTranspiler]
